@@ -1,0 +1,93 @@
+import type { LiveSession } from "@/types";
+
+export const INITIAL_SESSIONS: LiveSession[] = [
+  {
+    id: "s1",
+    courseId: "c1",
+    title: "VAT Compliance Live Q&A",
+    date: "2026-09-10",
+    time: "10:00",
+    durationMin: 60,
+    trainerId: "u4",
+    attendees: [
+      { userId: "u5", attended: false },
+      { userId: "u8", attended: false },
+      { userId: "u9", attended: true },
+      { userId: "u13", attended: true },
+    ],
+  },
+  {
+    id: "s2",
+    courseId: "c3",
+    title: "Income Tax Filing Workshop",
+    date: "2026-09-12",
+    time: "14:00",
+    durationMin: 90,
+    trainerId: "u4",
+    attendees: [
+      { userId: "u5", attended: false },
+      { userId: "u9", attended: true },
+      { userId: "u13", attended: true },
+      { userId: "u14", attended: false },
+    ],
+  },
+  {
+    id: "s3",
+    courseId: "c7",
+    title: "Tax Audit Case Study Session",
+    date: "2026-09-15",
+    time: "09:30",
+    durationMin: 120,
+    trainerId: "u4",
+    attendees: [
+      { userId: "u5", attended: true },
+      { userId: "u8", attended: true },
+      { userId: "u14", attended: false },
+    ],
+  },
+  {
+    id: "s4",
+    courseId: "c4",
+    title: "Tariff Classification Deep Dive",
+    date: "2026-09-17",
+    time: "11:00",
+    durationMin: 60,
+    trainerId: "u7",
+    attendees: [
+      { userId: "u5", attended: false },
+      { userId: "u10", attended: true },
+      { userId: "u12", attended: false },
+    ],
+  },
+  {
+    id: "s5",
+    courseId: "c8",
+    title: "eServices Portal Walkthrough",
+    date: "2026-09-22",
+    time: "15:00",
+    durationMin: 45,
+    trainerId: "u7",
+    attendees: [
+      { userId: "u5", attended: false },
+      { userId: "u11", attended: true },
+      { userId: "u12", attended: false },
+    ],
+  },
+  {
+    id: "s6",
+    courseId: "c1",
+    title: "VAT Returns Workshop (Past)",
+    date: "2026-08-28",
+    time: "09:00",
+    durationMin: 60,
+    trainerId: "u4",
+    attendees: [
+      { userId: "u5", attended: true },
+      { userId: "u8", attended: true },
+      { userId: "u9", attended: true },
+      { userId: "u13", attended: false },
+    ],
+  },
+];
+
+export const TODAY = "2026-09-08";

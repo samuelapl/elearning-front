@@ -1,0 +1,68 @@
+import type { ReactNode } from "react";
+import { BookOpen, Clock, Layers } from "lucide-react";
+import type { Course } from "@/types";
+import { Card } from "@/components/ui/Card";
+import { CourseStatusBadge } from "@/components/ui/Badge";
+
+interface CourseCardProps {
+  course: Course;
+  extraBadge?: ReactNode;
+  children?: ReactNode;
+}
+
+export function CourseCard({ course, extraBadge, children }: CourseCardProps) {
+  const lessonCount = course.modules.reduce(
+    (sum, module) => sum + module.lessons.length,
+    0,
+  );
+  const durationMin = course.modules.reduce(
+    (sum, module) =>
+      sum + module.lessons.reduce((a, lesson) => a + lesson.durationMin, 0),
+    0,
+  );
+
+  return (
+    <Card
+      interactive
+      className="group/card flex h-full flex-col transition-all duration-200"
+    >
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-1 rounded-t-2xl bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500 opacity-0 transition-opacity duration-300 group-hover/card:opacity-100" />
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-indigo-500/80">
+            {course.code}
+          </p>
+          <h3 className="mt-1 font-display text-base font-bold tracking-tight text-slate-900">
+            {course.title}
+          </h3>
+        </div>
+        <div className="flex shrink-0 flex-col items-end gap-1.5">
+          <CourseStatusBadge
+            status={course.published ? "published" : course.status}
+          />
+          {extraBadge}
+        </div>
+      </div>
+      <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-slate-500">
+        {course.description}
+      </p>
+      <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3 text-[11px] text-slate-500">
+        <span className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100/80 px-2 py-1 text-slate-600">
+          <BookOpen className="h-3.5 w-3.5 text-indigo-500/70" />
+          {course.category}
+        </span>
+        <span className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100/80 px-2 py-1 text-slate-600">
+          <Layers className="h-3.5 w-3.5 text-indigo-500/70" />
+          {course.modules.length} modules
+        </span>
+        <span className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100/80 px-2 py-1 text-slate-600">
+          <Clock className="h-3.5 w-3.5 text-indigo-500/70" />
+          {durationMin} min
+        </span>
+      </div>
+      {children ? (
+        <div className="mt-4 flex flex-wrap gap-2">{children}</div>
+      ) : null}
+    </Card>
+  );
+}
