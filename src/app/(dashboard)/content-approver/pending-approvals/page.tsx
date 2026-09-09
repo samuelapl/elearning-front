@@ -3,11 +3,13 @@
 import { useState } from "react";
 import { Check, Eye, X } from "lucide-react";
 import { useLms } from "@/lib/lms-store";
+import { usePagination } from "@/lib/usePagination";
 import PageShell from "@/components/shared/PageShell";
 import { Table, Td } from "@/components/ui/Table";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Modal } from "@/components/ui/Modal";
+import { Pagination } from "@/components/ui/Pagination";
 import { CourseDetailModal } from "@/components/features/courses/CourseDetailModal";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { userName } from "@/data/mock";
@@ -19,6 +21,7 @@ export default function PendingApprovalsPage() {
   const [reason, setReason] = useState("");
 
   const pending = courses.filter((c) => c.status === "under_review");
+  const { page, totalPages, setPage, pageItems } = usePagination(pending, 5);
   const rejectCourseData = courses.find((c) => c.id === rejectId);
 
   const confirmReject = () => {
@@ -42,7 +45,7 @@ export default function PendingApprovalsPage() {
         />
       ) : (
         <Table columns={["Course", "Owner", "Category", "Content", ""]}>
-          {pending.map((course) => (
+          {pageItems.map((course) => (
             <tr key={course.id}>
               <Td>
                 <span className="font-medium text-slate-900">{course.title}</span>
@@ -78,6 +81,7 @@ export default function PendingApprovalsPage() {
           ))}
         </Table>
       )}
+      <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
 
       <CourseDetailModal
         open={selectedId !== null}

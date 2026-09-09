@@ -16,6 +16,7 @@ import {
   INITIAL_USERS,
 } from "@/data/mock";
 import type {
+  Attachment,
   AuditLog,
   Course,
   Lang,
@@ -39,6 +40,8 @@ interface LmsContextValue {
     title: string;
     category: string;
     description: string;
+    attachments?: Attachment[];
+    quiz?: Quiz;
   }) => void;
   submitForApproval: (courseId: string) => void;
   approveCourse: (courseId: string) => void;
@@ -52,8 +55,10 @@ interface LmsContextValue {
     date: string;
     time: string;
     durationMin: number;
+    meetingUrl?: string;
   }) => void;
   toggleAttendance: (sessionId: string, userId: string) => void;
+  toggleTrainerAttendance: (sessionId: string) => void;
   advanceProgress: (courseId: string, learnerId: string, amount: number) => void;
   changeUserRole: (userId: string, role: Role) => void;
 }
@@ -117,6 +122,8 @@ export function LmsProvider({ children }: { children: ReactNode }) {
             ],
           },
         ],
+        attachments: input.attachments ?? [],
+        quiz: input.quiz,
       };
       setCourses((prev) => [...prev, newCourse]);
       addAudit(actorFor("course_owner"), "created course", newCourse.title);
@@ -239,6 +246,7 @@ export function LmsProvider({ children }: { children: ReactNode }) {
       date: string;
       time: string;
       durationMin: number;
+      meetingUrl?: string;
     }) => {
       const course = courses.find((c) => c.id === input.courseId);
       setSessions((prev) => [
@@ -251,6 +259,8 @@ export function LmsProvider({ children }: { children: ReactNode }) {
           time: input.time,
           durationMin: input.durationMin,
           trainerId: DEMO_USER_BY_ROLE.trainer,
+          meetingUrl: input.meetingUrl,
+          trainerAttended: false,
           attendees: (course?.enrolledLearnerIds ?? []).map((userId) => ({
             userId,
             attended: false,
@@ -281,6 +291,16 @@ export function LmsProvider({ children }: { children: ReactNode }) {
     },
     [],
   );
+
+  const toggleTrainerAttendance = useCallback((sessionId: string) => {
+    setSessions((prev) =>
+      prev.map((session) =>
+        session.id === sessionId
+          ? { ...session, trainerAttended: !session.trainerAttended }
+          : session,
+      ),
+    );
+  }, []);
 
   const advanceProgress = useCallback(
     (courseId: string, learnerId: string, amount: number) => {
@@ -333,6 +353,7 @@ export function LmsProvider({ children }: { children: ReactNode }) {
       updateQuiz,
       scheduleSession,
       toggleAttendance,
+      toggleTrainerAttendance,
       advanceProgress,
       changeUserRole,
     }),
@@ -353,6 +374,7 @@ export function LmsProvider({ children }: { children: ReactNode }) {
       updateQuiz,
       scheduleSession,
       toggleAttendance,
+      toggleTrainerAttendance,
       advanceProgress,
       changeUserRole,
     ],

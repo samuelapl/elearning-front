@@ -3,11 +3,13 @@
 import Link from "next/link";
 import { ArrowRight, BookOpen, CheckCircle2, ClipboardList, Plus, UsersRound } from "lucide-react";
 import { useLms } from "@/lib/lms-store";
+import { usePagination } from "@/lib/usePagination";
 import PageShell from "@/components/shared/PageShell";
 import PageSection from "@/components/shared/PageSection";
 import { StatCard } from "@/components/ui/StatCard";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { Pagination } from "@/components/ui/Pagination";
 import { CourseCard } from "@/components/features/courses/CourseCard";
 
 export default function CourseOwnerDashboardPage() {
@@ -16,6 +18,7 @@ export default function CourseOwnerDashboardPage() {
   const review = owned.filter((c) => c.status === "under_review");
   const approved = owned.filter((c) => c.status === "approved");
   const totalLearners = new Set(owned.flatMap((c) => c.enrolledLearnerIds)).size;
+  const ownedPage = usePagination(owned, 3);
 
   return (
     <PageShell
@@ -60,7 +63,7 @@ export default function CourseOwnerDashboardPage() {
         }
       >
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {owned.slice(0, 3).map((course) => (
+          {ownedPage.pageItems.map((course) => (
             <CourseCard key={course.id} course={course}>
               <Link href={`/course-owner/my-courses`}>
                 <Button size="sm" variant="outline">
@@ -73,6 +76,11 @@ export default function CourseOwnerDashboardPage() {
             </CourseCard>
           ))}
         </div>
+        <Pagination
+          page={ownedPage.page}
+          totalPages={ownedPage.totalPages}
+          onPageChange={ownedPage.setPage}
+        />
       </PageSection>
 
       <PageSection

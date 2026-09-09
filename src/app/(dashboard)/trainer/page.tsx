@@ -4,12 +4,14 @@ import Link from "next/link";
 import { ArrowRight, ClipboardCheck, FileQuestion, Presentation, Video } from "lucide-react";
 import { DEMO_USER_BY_ROLE } from "@/data/mock";
 import { useLms } from "@/lib/lms-store";
+import { usePagination } from "@/lib/usePagination";
 import PageShell from "@/components/shared/PageShell";
 import PageSection from "@/components/shared/PageSection";
 import { StatCard } from "@/components/ui/StatCard";
 import { Card, CardDescription, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { Pagination } from "@/components/ui/Pagination";
 import { CourseCard } from "@/components/features/courses/CourseCard";
 import { TODAY } from "@/data/mock";
 
@@ -41,6 +43,7 @@ export default function TrainerDashboardPage() {
     (s) => s.date >= TODAY && s.trainerId === DEMO_USER_BY_ROLE.trainer,
   );
   const quizzes = assigned.filter((c) => c.quiz);
+  const assignedPage = usePagination(assigned, 3);
 
   return (
     <PageShell
@@ -78,7 +81,7 @@ export default function TrainerDashboardPage() {
         }
       >
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {assigned.slice(0, 3).map((course) => (
+          {assignedPage.pageItems.map((course) => (
             <CourseCard
               key={course.id}
               course={course}
@@ -92,6 +95,11 @@ export default function TrainerDashboardPage() {
             </CourseCard>
           ))}
         </div>
+        <Pagination
+          page={assignedPage.page}
+          totalPages={assignedPage.totalPages}
+          onPageChange={assignedPage.setPage}
+        />
       </PageSection>
 
       <PageSection title="Quick actions" description="Common trainer tasks.">

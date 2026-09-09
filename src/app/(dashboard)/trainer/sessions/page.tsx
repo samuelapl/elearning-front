@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { CalendarPlus } from "lucide-react";
+import { CalendarPlus, Video } from "lucide-react";
 import { DEMO_USER_BY_ROLE } from "@/data/mock";
 import { useLms } from "@/lib/lms-store";
+import { usePagination } from "@/lib/usePagination";
 import PageShell from "@/components/shared/PageShell";
 import PageSection from "@/components/shared/PageSection";
 import { Button } from "@/components/ui/Button";
+import { Pagination } from "@/components/ui/Pagination";
 import { SessionTable } from "@/components/features/sessions/SessionTable";
 import { ScheduleSessionModal } from "@/components/features/sessions/ScheduleSessionModal";
 
@@ -32,6 +34,9 @@ export default function TrainerSessionsPage() {
         };
       });
 
+  const upcomingRows = usePagination(toRows(upcoming), 5);
+  const pastRows = usePagination(toRows(past), 5);
+
   return (
     <PageShell
       role="trainer"
@@ -48,12 +53,34 @@ export default function TrainerSessionsPage() {
           </Button>
         }
       >
-        <SessionTable sessions={toRows(upcoming)} />
+        <SessionTable
+          sessions={upcomingRows.pageItems}
+          extra={(row) =>
+            row.session.meetingUrl ? (
+              <a href={row.session.meetingUrl} target="_blank" rel="noreferrer">
+                <Button size="sm">
+                  <Video className="h-3.5 w-3.5" />
+                  Join
+                </Button>
+              </a>
+            ) : null
+          }
+        />
+        <Pagination
+          page={upcomingRows.page}
+          totalPages={upcomingRows.totalPages}
+          onPageChange={upcomingRows.setPage}
+        />
       </PageSection>
 
       {past.length > 0 ? (
         <PageSection title="Past sessions" description="Completed sessions with attendance records.">
-          <SessionTable sessions={toRows(past)} />
+          <SessionTable sessions={pastRows.pageItems} />
+          <Pagination
+            page={pastRows.page}
+            totalPages={pastRows.totalPages}
+            onPageChange={pastRows.setPage}
+          />
         </PageSection>
       ) : null}
 

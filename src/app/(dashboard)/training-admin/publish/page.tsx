@@ -3,11 +3,13 @@
 import { useState } from "react";
 import { Eye, Globe2 } from "lucide-react";
 import { useLms } from "@/lib/lms-store";
+import { usePagination } from "@/lib/usePagination";
 import PageShell from "@/components/shared/PageShell";
 import PageSection from "@/components/shared/PageSection";
 import { Table, Td } from "@/components/ui/Table";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { Pagination } from "@/components/ui/Pagination";
 import { CourseDetailModal } from "@/components/features/courses/CourseDetailModal";
 import { EmptyState } from "@/components/ui/EmptyState";
 
@@ -18,6 +20,8 @@ export default function PublishCoursesPage() {
   const ready = courses.filter((c) => c.status === "approved" && !c.published);
   const locked = courses.filter((c) => c.status !== "approved");
   const published = courses.filter((c) => c.published);
+  const readyPage = usePagination(ready, 5);
+  const publishedPage = usePagination(published, 5);
 
   return (
     <PageShell
@@ -36,7 +40,7 @@ export default function PublishCoursesPage() {
           />
         ) : (
           <Table columns={["Course", "Category", "Content", ""]}>
-            {ready.map((course) => (
+            {readyPage.pageItems.map((course) => (
               <tr key={course.id}>
                 <Td>
                   <span className="font-medium text-slate-900">{course.title}</span>
@@ -67,6 +71,7 @@ export default function PublishCoursesPage() {
             ))}
           </Table>
         )}
+        <Pagination page={readyPage.page} totalPages={readyPage.totalPages} onPageChange={readyPage.setPage} />
       </PageSection>
 
       <PageSection
@@ -74,7 +79,7 @@ export default function PublishCoursesPage() {
         description="Currently visible to learners."
       >
         <Table columns={["Course", "Category", "Learners", ""]}>
-          {published.map((course) => (
+          {publishedPage.pageItems.map((course) => (
             <tr key={course.id}>
               <Td>
                 <span className="font-medium text-slate-900">{course.title}</span>
@@ -93,6 +98,11 @@ export default function PublishCoursesPage() {
             </tr>
           ))}
         </Table>
+        <Pagination
+          page={publishedPage.page}
+          totalPages={publishedPage.totalPages}
+          onPageChange={publishedPage.setPage}
+        />
       </PageSection>
 
       {locked.length > 0 ? (

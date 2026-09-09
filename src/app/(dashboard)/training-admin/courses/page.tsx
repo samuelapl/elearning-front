@@ -3,16 +3,19 @@
 import { useState } from "react";
 import { Eye, Globe2 } from "lucide-react";
 import { useLms } from "@/lib/lms-store";
+import { usePagination } from "@/lib/usePagination";
 import PageShell from "@/components/shared/PageShell";
 import { Table, Td } from "@/components/ui/Table";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { Pagination } from "@/components/ui/Pagination";
 import { CourseDetailModal } from "@/components/features/courses/CourseDetailModal";
 import { userName } from "@/data/mock";
 
 export default function CourseManagementPage() {
   const { courses, users, publishCourse } = useLms();
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const { page, totalPages, setPage, pageItems } = usePagination(courses, 5);
 
   return (
     <PageShell
@@ -21,7 +24,7 @@ export default function CourseManagementPage() {
       description="All courses in the catalog with their approval and publication status."
     >
       <Table columns={["Course", "Owner", "Approv.", "Publish", "Learners", ""]}>
-        {courses.map((course) => (
+        {pageItems.map((course) => (
           <tr key={course.id}>
             <Td>
               <span className="font-medium text-slate-900">{course.title}</span>
@@ -58,6 +61,7 @@ export default function CourseManagementPage() {
           </tr>
         ))}
       </Table>
+      <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
 
       <CourseDetailModal
         open={selectedId !== null}

@@ -19,6 +19,7 @@ export function ScheduleSessionModal({ open, onClose, courses }: ScheduleSession
   const [date, setDate] = useState("2026-09-25");
   const [time, setTime] = useState("10:00");
   const [duration, setDuration] = useState(60);
+  const [meetingUrl, setMeetingUrl] = useState("");
 
   const inputClass =
     "w-full rounded-xl border border-slate-200/90 bg-white px-3.5 py-2.5 text-sm text-slate-700 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-indigo-400 focus:ring-4 focus:ring-indigo-500/10";
@@ -33,8 +34,10 @@ export function ScheduleSessionModal({ open, onClose, courses }: ScheduleSession
       date,
       time,
       durationMin: Number(duration),
+      meetingUrl: meetingUrl.trim() || undefined,
     });
     setTitle("");
+    setMeetingUrl("");
     onClose();
   };
 
@@ -104,6 +107,18 @@ export function ScheduleSessionModal({ open, onClose, courses }: ScheduleSession
               className={inputClass}
             />
           </div>
+        </div>
+        <div>
+          <label className="mb-1.5 block text-xs font-semibold text-slate-600">
+            Meeting link (optional)
+          </label>
+          <input
+            type="url"
+            value={meetingUrl}
+            onChange={(event) => setMeetingUrl(event.target.value)}
+            placeholder="e.g. https://meet.example.com/session"
+            className={inputClass}
+          />
         </div>
         <div className="flex justify-end gap-2 pt-2">
           <Button type="button" variant="ghost" onClick={onClose}>

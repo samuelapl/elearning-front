@@ -52,6 +52,15 @@ export interface Quiz {
   questions: Question[];
 }
 
+export type AttachmentType = "video" | "pdf";
+
+export interface Attachment {
+  id: string;
+  name: string;
+  type: AttachmentType;
+  url: string;
+}
+
 export interface Course {
   id: string;
   code: string;
@@ -66,6 +75,7 @@ export interface Course {
   enrolledLearnerIds: string[];
   progress: Record<string, number>;
   modules: Module[];
+  attachments?: Attachment[];
   quiz?: Quiz;
 }
 
@@ -82,6 +92,8 @@ export interface LiveSession {
   time: string;
   durationMin: number;
   trainerId: string;
+  meetingUrl?: string;
+  trainerAttended?: boolean;
   attendees: SessionAttendee[];
 }
 

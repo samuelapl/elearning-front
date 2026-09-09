@@ -3,17 +3,21 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Clock4, FileCheck2, Timer } from "lucide-react";
 import { useLms } from "@/lib/lms-store";
+import { usePagination } from "@/lib/usePagination";
 import PageShell from "@/components/shared/PageShell";
 import PageSection from "@/components/shared/PageSection";
 import { StatCard } from "@/components/ui/StatCard";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { Pagination } from "@/components/ui/Pagination";
 import { CourseCard } from "@/components/features/courses/CourseCard";
 
 export default function ContentApproverDashboardPage() {
   const { courses } = useLms();
   const pending = courses.filter((c) => c.status === "under_review");
   const approved = courses.filter((c) => c.status === "approved");
+  const pendingPage = usePagination(pending, 3);
+  const approvedPage = usePagination(approved, 3);
 
   return (
     <PageShell
@@ -58,7 +62,7 @@ export default function ContentApproverDashboardPage() {
           }
         >
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {pending.slice(0, 3).map((course) => (
+            {pendingPage.pageItems.map((course) => (
               <CourseCard key={course.id} course={course}>
                 <Badge variant="blue">Pending review</Badge>
                 <Link href="/content-approver/pending-approvals">
@@ -69,6 +73,11 @@ export default function ContentApproverDashboardPage() {
               </CourseCard>
             ))}
           </div>
+          <Pagination
+            page={pendingPage.page}
+            totalPages={pendingPage.totalPages}
+            onPageChange={pendingPage.setPage}
+          />
         </PageSection>
       ) : (
         <PageSection title="Approval queue" description="The approval queue is currently empty.">
@@ -97,10 +106,15 @@ export default function ContentApproverDashboardPage() {
         }
       >
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {approved.slice(0, 3).map((course) => (
+          {approvedPage.pageItems.map((course) => (
             <CourseCard key={course.id} course={course} />
           ))}
         </div>
+        <Pagination
+          page={approvedPage.page}
+          totalPages={approvedPage.totalPages}
+          onPageChange={approvedPage.setPage}
+        />
       </PageSection>
     </PageShell>
   );

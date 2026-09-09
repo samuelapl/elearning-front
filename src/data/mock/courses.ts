@@ -34,6 +34,20 @@ export const INITIAL_COURSES: Course[] = [
         ],
       },
     ],
+    attachments: [
+      {
+        id: "att-c1-1",
+        name: "VAT Registration Overview.mp4",
+        type: "video",
+        url: "https://example.com/media/vat-registration-overview.mp4",
+      },
+      {
+        id: "att-c1-2",
+        name: "Tax Invoice Template.pdf",
+        type: "pdf",
+        url: "https://example.com/media/tax-invoice-template.pdf",
+      },
+    ],
     quiz: {
       id: "q1",
       title: "VAT Fundamentals Quiz",
@@ -93,6 +107,20 @@ export const INITIAL_COURSES: Course[] = [
           { id: "l7", title: "Assessment, verification and clearance", durationMin: 25 },
           { id: "l8", title: "Duty payment and release orders", durationMin: 20 },
         ],
+      },
+    ],
+    attachments: [
+      {
+        id: "att-c2-1",
+        name: "Customs Declaration Walkthrough.mp4",
+        type: "video",
+        url: "https://example.com/media/customs-declaration-walkthrough.mp4",
+      },
+      {
+        id: "att-c2-2",
+        name: "Required Documents Checklist.pdf",
+        type: "pdf",
+        url: "https://example.com/media/required-documents-checklist.pdf",
       },
     ],
   },

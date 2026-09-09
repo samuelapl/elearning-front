@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { Eye, Plus, Send } from "lucide-react";
 import { useLms } from "@/lib/lms-store";
+import { usePagination } from "@/lib/usePagination";
 import PageShell from "@/components/shared/PageShell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { Pagination } from "@/components/ui/Pagination";
 import { CourseCard } from "@/components/features/courses/CourseCard";
 import { CourseDetailModal } from "@/components/features/courses/CourseDetailModal";
 import { CreateCourseModal } from "@/components/features/courses/CreateCourseModal";
@@ -15,6 +17,7 @@ export default function MyCoursesPage() {
   const { courses, submitForApproval } = useLms();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [createOpen, setCreateOpen] = useState(false);
+  const { page, totalPages, setPage, pageItems } = usePagination(courses, 6);
 
   return (
     <PageShell
@@ -36,7 +39,7 @@ export default function MyCoursesPage() {
         />
       ) : (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {courses.map((course) => (
+          {pageItems.map((course) => (
             <CourseCard
               key={course.id}
               course={course}
@@ -58,6 +61,7 @@ export default function MyCoursesPage() {
           ))}
         </div>
       )}
+      <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
 
       <CourseDetailModal
         open={selectedId !== null}

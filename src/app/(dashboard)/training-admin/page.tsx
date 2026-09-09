@@ -10,11 +10,13 @@ import {
   UsersRound,
 } from "lucide-react";
 import { useLms } from "@/lib/lms-store";
+import { usePagination } from "@/lib/usePagination";
 import PageShell from "@/components/shared/PageShell";
 import PageSection from "@/components/shared/PageSection";
 import { StatCard } from "@/components/ui/StatCard";
 import { Card, CardTitle, CardDescription } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { Pagination } from "@/components/ui/Pagination";
 import { TODAY } from "@/data/mock";
 
 const QUICK_LINKS = [
@@ -49,6 +51,8 @@ export default function TrainingAdminDashboardPage() {
   const published = courses.filter((c) => c.published);
   const upcoming = sessions.filter((s) => s.date >= TODAY);
   const totalLearners = new Set(courses.flatMap((c) => c.enrolledLearnerIds)).size;
+  const publishNext = courses.filter((c) => c.status === "approved" && !c.published);
+  const publishNextPage = usePagination(publishNext, 3);
 
   return (
     <PageShell
@@ -123,18 +127,20 @@ export default function TrainingAdminDashboardPage() {
         }
       >
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {courses
-            .filter((c) => c.status === "approved" && !c.published)
-            .slice(0, 3)
-            .map((course) => (
-              <Card key={course.id}>
-                <CardTitle>{course.title}</CardTitle>
-                <CardDescription>
-                  {course.code} · {course.category}
-                </CardDescription>
-              </Card>
-            ))}
+          {publishNextPage.pageItems.map((course) => (
+            <Card key={course.id}>
+              <CardTitle>{course.title}</CardTitle>
+              <CardDescription>
+                {course.code} · {course.category}
+              </CardDescription>
+            </Card>
+          ))}
         </div>
+        <Pagination
+          page={publishNextPage.page}
+          totalPages={publishNextPage.totalPages}
+          onPageChange={publishNextPage.setPage}
+        />
       </PageSection>
     </PageShell>
   );
