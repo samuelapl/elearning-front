@@ -27,6 +27,7 @@ import {
 import { loadLmsState, saveLmsState } from "@/lib/storage";
 import type {
   ActionResult,
+  Attachment,
   AuditLog,
   Course,
   Lang,
@@ -70,6 +71,8 @@ interface LmsContextValue {
     title: string;
     category: string;
     description: string;
+    attachments?: Attachment[];
+    quiz?: Quiz;
   }) => ActionResult;
   updateCourse: (
     courseId: string,
@@ -88,8 +91,10 @@ interface LmsContextValue {
     date: string;
     time: string;
     durationMin: number;
+    meetingUrl?: string;
   }) => void;
   toggleAttendance: (sessionId: string, userId: string) => void;
+  toggleTrainerAttendance: (sessionId: string) => void;
   advanceProgress: (courseId: string, learnerId: string, amount: number) => void;
   changeUserRole: (userId: string, role: Role) => ActionResult;
 }
@@ -313,6 +318,8 @@ export function LmsProvider({ children }: { children: ReactNode }) {
             ],
           },
         ],
+        attachments: input.attachments ?? [],
+        quiz: input.quiz,
       };
       setCourses((prev) => [...prev, newCourse]);
       addAudit(actorName("course_owner"), "created course", newCourse.title);
@@ -526,6 +533,7 @@ export function LmsProvider({ children }: { children: ReactNode }) {
       date: string;
       time: string;
       durationMin: number;
+      meetingUrl?: string;
     }) => {
       const course = courses.find((c) => c.id === input.courseId);
       setSessions((prev) => [
@@ -538,6 +546,8 @@ export function LmsProvider({ children }: { children: ReactNode }) {
           time: input.time,
           durationMin: input.durationMin,
           trainerId: currentUser?.id ?? DEMO_USER_BY_ROLE.trainer,
+          meetingUrl: input.meetingUrl,
+          trainerAttended: false,
           attendees: (course?.enrolledLearnerIds ?? []).map((userId) => ({
             userId,
             attended: false,
@@ -561,6 +571,16 @@ export function LmsProvider({ children }: { children: ReactNode }) {
                   : attendee,
               ),
             }
+          : session,
+      ),
+    );
+  }, []);
+
+  const toggleTrainerAttendance = useCallback((sessionId: string) => {
+    setSessions((prev) =>
+      prev.map((session) =>
+        session.id === sessionId
+          ? { ...session, trainerAttended: !session.trainerAttended }
           : session,
       ),
     );
@@ -626,6 +646,7 @@ export function LmsProvider({ children }: { children: ReactNode }) {
       updateQuiz,
       scheduleSession,
       toggleAttendance,
+      toggleTrainerAttendance,
       advanceProgress,
       changeUserRole,
     }),
@@ -656,6 +677,7 @@ export function LmsProvider({ children }: { children: ReactNode }) {
       updateQuiz,
       scheduleSession,
       toggleAttendance,
+      toggleTrainerAttendance,
       advanceProgress,
       changeUserRole,
     ],

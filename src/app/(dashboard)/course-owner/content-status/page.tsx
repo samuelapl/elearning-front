@@ -3,10 +3,12 @@
 import { useMemo, useState } from "react";
 import { Eye, Send } from "lucide-react";
 import { useLms } from "@/lib/lms-store";
+import { usePagination } from "@/lib/usePagination";
 import PageShell from "@/components/shared/PageShell";
 import { Table, Td } from "@/components/ui/Table";
 import { Button } from "@/components/ui/Button";
 import { Badge, CourseStatusBadge } from "@/components/ui/Badge";
+import { Pagination } from "@/components/ui/Pagination";
 import { CourseDetailModal } from "@/components/features/courses/CourseDetailModal";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { FilterBar } from "@/components/ui/FilterBar";
@@ -29,6 +31,7 @@ export default function ContentStatusPage() {
       );
     });
   }, [courses, search, status]);
+  const { page, totalPages, setPage, pageItems } = usePagination(filtered, 5);
 
   return (
     <PageShell
@@ -66,7 +69,7 @@ export default function ContentStatusPage() {
         <EmptyState title="No courses" description="Nothing matches the current filters." />
       ) : (
         <Table columns={["Course", "Approval status", "Publish status", "Admin feedback", ""]}>
-          {filtered.map((course) => (
+          {pageItems.map((course) => (
             <tr key={course.id}>
               <Td>
                 <span className="font-medium text-slate-900">{course.title}</span>
@@ -111,6 +114,7 @@ export default function ContentStatusPage() {
           ))}
         </Table>
       )}
+      <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
 
       <CourseDetailModal
         open={selectedId !== null}

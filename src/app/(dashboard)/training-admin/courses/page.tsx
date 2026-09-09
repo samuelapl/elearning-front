@@ -3,10 +3,12 @@
 import { useMemo, useState } from "react";
 import { Eye, Globe2 } from "lucide-react";
 import { useLms } from "@/lib/lms-store";
+import { usePagination } from "@/lib/usePagination";
 import PageShell from "@/components/shared/PageShell";
 import { Table, Td } from "@/components/ui/Table";
 import { Button } from "@/components/ui/Button";
 import { Badge, CourseStatusBadge } from "@/components/ui/Badge";
+import { Pagination } from "@/components/ui/Pagination";
 import { CourseDetailModal } from "@/components/features/courses/CourseDetailModal";
 import { FilterBar } from "@/components/ui/FilterBar";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -40,6 +42,7 @@ export default function CourseManagementPage() {
       );
     });
   }, [courses, users, search, status, category, owner]);
+  const { page, totalPages, setPage, pageItems } = usePagination(filtered, 5);
 
   return (
     <PageShell
@@ -100,7 +103,7 @@ export default function CourseManagementPage() {
         <EmptyState title="No courses match" description="Clear filters to see the full catalog." />
       ) : (
         <Table columns={["Course", "Owner", "Status", "Publish", "Learners", ""]}>
-          {filtered.map((course) => (
+          {pageItems.map((course) => (
             <tr key={course.id}>
               <Td>
                 <span className="font-medium text-slate-900">{course.title}</span>
@@ -136,6 +139,7 @@ export default function CourseManagementPage() {
           ))}
         </Table>
       )}
+      <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
 
       <CourseDetailModal
         open={selectedId !== null}

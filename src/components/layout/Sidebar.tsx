@@ -30,7 +30,9 @@ export default function Sidebar() {
           <GraduationCap className="h-5 w-5" />
         </div>
         <div className="leading-tight">
-          <p className="font-display text-sm font-bold tracking-tight text-white">ELTMS</p>
+          <p className="font-display text-sm font-bold tracking-tight text-white">
+            ELTMS
+          </p>
           <p className="text-[11px] text-slate-400">MoR Training System</p>
         </div>
       </div>

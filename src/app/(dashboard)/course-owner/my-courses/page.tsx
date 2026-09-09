@@ -3,9 +3,11 @@
 import { useMemo, useState } from "react";
 import { Eye, Pencil, Plus, Send } from "lucide-react";
 import { useLms } from "@/lib/lms-store";
+import { usePagination } from "@/lib/usePagination";
 import PageShell from "@/components/shared/PageShell";
 import { Button } from "@/components/ui/Button";
-import { CourseStatusBadge } from "@/components/ui/Badge";
+import { Badge } from "@/components/ui/Badge";
+import { Pagination } from "@/components/ui/Pagination";
 import { CourseCard } from "@/components/features/courses/CourseCard";
 import { CourseDetailModal } from "@/components/features/courses/CourseDetailModal";
 import { CreateCourseModal } from "@/components/features/courses/CreateCourseModal";
@@ -38,6 +40,7 @@ export default function MyCoursesPage() {
       );
     });
   }, [courses, search, status, category]);
+  const { page, totalPages, setPage, pageItems } = usePagination(filtered, 6);
 
   const resubmit = (courseId: string) => {
     const result = submitForApproval(courseId);
@@ -107,8 +110,14 @@ export default function MyCoursesPage() {
         />
       ) : (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {filtered.map((course) => (
-            <CourseCard key={course.id} course={course}>
+          {pageItems.map((course) => (
+            <CourseCard
+              key={course.id}
+              course={course}
+              extraBadge={
+                course.status === "under_review" ? <Badge variant="blue">Pending review</Badge> : undefined
+              }
+            >
               {course.status === "rejected" && course.rejectionReason ? (
                 <div className="w-full rounded-xl border border-red-200/70 bg-red-50/80 px-3 py-2 text-xs text-red-700">
                   <p className="font-semibold">Admin feedback</p>
@@ -135,6 +144,7 @@ export default function MyCoursesPage() {
           ))}
         </div>
       )}
+      <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
 
       <CourseDetailModal
         open={selectedId !== null}

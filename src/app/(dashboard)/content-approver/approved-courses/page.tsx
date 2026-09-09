@@ -3,10 +3,12 @@
 import { useState } from "react";
 import { Eye } from "lucide-react";
 import { useLms } from "@/lib/lms-store";
+import { usePagination } from "@/lib/usePagination";
 import PageShell from "@/components/shared/PageShell";
 import { Table, Td } from "@/components/ui/Table";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { Pagination } from "@/components/ui/Pagination";
 import { CourseDetailModal } from "@/components/features/courses/CourseDetailModal";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { userName } from "@/data/mock";
@@ -15,6 +17,7 @@ export default function ApprovedCoursesPage() {
   const { courses, users } = useLms();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const approved = courses.filter((c) => c.status === "approved");
+  const { page, totalPages, setPage, pageItems } = usePagination(approved, 5);
 
   return (
     <PageShell
@@ -26,7 +29,7 @@ export default function ApprovedCoursesPage() {
         <EmptyState title="No approved courses" description="Approved content will appear here." />
       ) : (
         <Table columns={["Course", "Owner", "Category", "Publication", "Content", ""]}>
-          {approved.map((course) => (
+          {pageItems.map((course) => (
             <tr key={course.id}>
               <Td>
                 <span className="font-medium text-slate-900">{course.title}</span>
@@ -57,6 +60,7 @@ export default function ApprovedCoursesPage() {
           ))}
         </Table>
       )}
+      <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
 
       <CourseDetailModal
         open={selectedId !== null}

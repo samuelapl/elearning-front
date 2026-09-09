@@ -9,6 +9,8 @@ export const INITIAL_SESSIONS: LiveSession[] = [
     time: "10:00",
     durationMin: 60,
     trainerId: "u4",
+    meetingUrl: "https://meet.example.com/vat-compliance-qa",
+    trainerAttended: false,
     attendees: [
       { userId: "u5", attended: false },
       { userId: "u8", attended: false },
@@ -24,6 +26,8 @@ export const INITIAL_SESSIONS: LiveSession[] = [
     time: "14:00",
     durationMin: 90,
     trainerId: "u4",
+    meetingUrl: "https://meet.example.com/income-tax-workshop",
+    trainerAttended: false,
     attendees: [
       { userId: "u5", attended: false },
       { userId: "u9", attended: true },
@@ -39,6 +43,8 @@ export const INITIAL_SESSIONS: LiveSession[] = [
     time: "09:30",
     durationMin: 120,
     trainerId: "u4",
+    meetingUrl: "https://meet.example.com/tax-audit-case-study",
+    trainerAttended: false,
     attendees: [
       { userId: "u5", attended: true },
       { userId: "u8", attended: true },
@@ -53,6 +59,8 @@ export const INITIAL_SESSIONS: LiveSession[] = [
     time: "11:00",
     durationMin: 60,
     trainerId: "u7",
+    meetingUrl: "https://meet.example.com/tariff-classification",
+    trainerAttended: false,
     attendees: [
       { userId: "u5", attended: false },
       { userId: "u10", attended: true },
@@ -67,6 +75,8 @@ export const INITIAL_SESSIONS: LiveSession[] = [
     time: "15:00",
     durationMin: 45,
     trainerId: "u7",
+    meetingUrl: "https://meet.example.com/eservices-portal-walkthrough",
+    trainerAttended: false,
     attendees: [
       { userId: "u5", attended: false },
       { userId: "u11", attended: true },
@@ -81,6 +91,7 @@ export const INITIAL_SESSIONS: LiveSession[] = [
     time: "09:00",
     durationMin: 60,
     trainerId: "u4",
+    trainerAttended: true,
     attendees: [
       { userId: "u5", attended: true },
       { userId: "u8", attended: true },
