@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Award, PlayCircle } from "lucide-react";
-import { DEMO_USER_BY_ROLE } from "@/data/mock";
 import { useLms } from "@/lib/lms-store";
 import { tr } from "@/constants/labels";
 import PageShell from "@/components/shared/PageShell";
@@ -17,8 +16,8 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import type { Course } from "@/types";
 
 export default function LearnerCoursesPage() {
-  const { courses, lang, advanceProgress } = useLms();
-  const me = DEMO_USER_BY_ROLE.learner;
+  const { courses, lang, currentUser, advanceProgress } = useLms();
+  const me = currentUser?.id ?? "";
   const enrolled = courses.filter((c) => c.enrolledLearnerIds.includes(me));
   const [quizCourse, setQuizCourse] = useState<Course | null>(null);
 

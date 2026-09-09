@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Video, MonitorPlay } from "lucide-react";
-import { DEMO_USER_BY_ROLE, TODAY } from "@/data/mock";
+import { TODAY } from "@/data/mock";
 import { useLms } from "@/lib/lms-store";
 import { tr } from "@/constants/labels";
 import PageShell from "@/components/shared/PageShell";
@@ -13,8 +13,8 @@ import { SessionTable } from "@/components/features/sessions/SessionTable";
 import { EmptyState } from "@/components/ui/EmptyState";
 
 export default function LiveSessionsPage() {
-  const { courses, sessions, courseById, userName, lang } = useLms();
-  const me = DEMO_USER_BY_ROLE.learner;
+  const { courses, sessions, courseById, userName, lang, currentUser } = useLms();
+  const me = currentUser?.id ?? "";
   const [joined, setJoined] = useState<string[]>([]);
 
   const enrolledCourseIds = courses

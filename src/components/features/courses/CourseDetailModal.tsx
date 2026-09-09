@@ -1,18 +1,27 @@
 "use client";
 
 import { CalendarDays, ClipboardPen, UserRound } from "lucide-react";
-import type { Course } from "@/types";
 import { Modal } from "@/components/ui/Modal";
 import { Badge, CourseStatusBadge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { useLms } from "@/lib/lms-store";
 
 interface CourseDetailModalProps {
   open: boolean;
   onClose: () => void;
   courseId: string;
+  reviewActions?: {
+    onApprove: () => void;
+    onReject: () => void;
+  };
 }
 
-export function CourseDetailModal({ open, onClose, courseId }: CourseDetailModalProps) {
+export function CourseDetailModal({
+  open,
+  onClose,
+  courseId,
+  reviewActions,
+}: CourseDetailModalProps) {
   const { courseById, userName } = useLms();
   const course = courseById(courseId);
 
@@ -48,8 +57,21 @@ export function CourseDetailModal({ open, onClose, courseId }: CourseDetailModal
 
         {course.rejectionReason ? (
           <div className="rounded-xl border border-red-200/70 bg-red-50/80 px-4 py-3 text-sm text-red-700">
-            <p className="font-medium">Rejection reason</p>
+            <p className="font-medium">Admin feedback</p>
             <p className="mt-0.5">{course.rejectionReason}</p>
+            {course.rejectedBy || course.rejectedAt ? (
+              <p className="mt-1 text-[11px] text-red-500/80">
+                {course.rejectedBy ? `Rejected by ${course.rejectedBy}` : null}
+                {course.rejectedAt ? ` · ${course.rejectedAt}` : null}
+              </p>
+            ) : null}
+          </div>
+        ) : null}
+
+        {!course.rejectionReason && course.lastRejectionReason ? (
+          <div className="rounded-xl border border-amber-200/70 bg-amber-50/80 px-4 py-3 text-sm text-amber-800">
+            <p className="font-medium">Previous admin feedback</p>
+            <p className="mt-0.5">{course.lastRejectionReason}</p>
           </div>
         ) : null}
 
@@ -98,6 +120,19 @@ export function CourseDetailModal({ open, onClose, courseId }: CourseDetailModal
               </p>
             </div>
             <Badge variant="green" dot>Quiz ready</Badge>
+          </div>
+        ) : (
+          <p className="text-xs text-slate-400">No assessment has been attached yet.</p>
+        )}
+
+        {reviewActions ? (
+          <div className="flex justify-end gap-2 border-t border-slate-100 pt-4">
+            <Button variant="danger" onClick={reviewActions.onReject}>
+              Reject course
+            </Button>
+            <Button variant="success" onClick={reviewActions.onApprove}>
+              Approve course
+            </Button>
           </div>
         ) : null}
       </div>

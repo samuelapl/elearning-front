@@ -16,17 +16,21 @@ const VARIANT_CLASSES: Record<BadgeVariant, string> = {
 export function statusBadgeVariant(status: string): BadgeVariant {
   switch (status) {
     case "under_review":
+    case "pending":
       return "blue";
     case "approved":
     case "published":
-      return "green";
+    case "active":
     case "completed":
       return "green";
     case "draft":
     case "not_published":
       return "amber";
     case "rejected":
+    case "suspended":
       return "red";
+    case "archived":
+      return "slate";
     default:
       return "slate";
   }
@@ -65,11 +69,20 @@ export function Badge({ variant = "slate", dot = false, className, children, ...
 export function CourseStatusBadge({ status }: { status: string }) {
   const labels: Record<string, string> = {
     draft: "Draft",
-    under_review: "Under Review",
+    under_review: "Pending Approval",
     approved: "Approved",
     published: "Published",
     not_published: "Not Published",
     completed: "Completed",
+    rejected: "Rejected",
+    archived: "Archived",
+    pending: "Pending",
+    active: "Active",
+    suspended: "Suspended",
   };
   return <Badge variant={statusBadgeVariant(status)} dot>{labels[status] ?? status}</Badge>;
+}
+
+export function UserStatusBadge({ status }: { status: string }) {
+  return <CourseStatusBadge status={status} />;
 }

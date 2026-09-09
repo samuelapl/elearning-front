@@ -1,6 +1,5 @@
 "use client";
 
-import { DEMO_USER_BY_ROLE } from "@/data/mock";
 import { useLms } from "@/lib/lms-store";
 import { tr } from "@/constants/labels";
 import PageShell from "@/components/shared/PageShell";
@@ -9,8 +8,8 @@ import { CertificateCard } from "@/components/features/cert/CertificateCard";
 import { EmptyState } from "@/components/ui/EmptyState";
 
 export default function CertificatesPage() {
-  const { courses, users, lang } = useLms();
-  const me = DEMO_USER_BY_ROLE.learner;
+  const { courses, users, lang, currentUser } = useLms();
+  const me = currentUser?.id ?? "";
   const learner = users.find((u) => u.id === me);
   const completed = courses.filter((c) => (c.progress[me] ?? 0) >= 100);
 

@@ -14,6 +14,7 @@ export const INITIAL_COURSES: Course[] = [
     trainerId: "u4",
     status: "approved",
     published: true,
+    createdAt: "2026-07-12",
     enrolledLearnerIds: ["u5", "u8", "u9", "u13"],
     progress: { u5: 45, u8: 62, u9: 30, u13: 80 },
     modules: [
@@ -75,6 +76,7 @@ export const INITIAL_COURSES: Course[] = [
     trainerId: null,
     status: "under_review",
     published: false,
+    createdAt: "2026-09-01",
     enrolledLearnerIds: [],
     progress: {},
     modules: [
@@ -107,6 +109,7 @@ export const INITIAL_COURSES: Course[] = [
     trainerId: "u4",
     status: "approved",
     published: true,
+    createdAt: "2026-06-20",
     enrolledLearnerIds: ["u5", "u9", "u13", "u14"],
     progress: { u5: 80, u9: 55, u13: 100, u14: 20 },
     modules: [
@@ -168,6 +171,7 @@ export const INITIAL_COURSES: Course[] = [
     trainerId: "u7",
     status: "approved",
     published: true,
+    createdAt: "2026-05-18",
     enrolledLearnerIds: ["u5", "u10", "u12"],
     progress: { u5: 15, u10: 100, u12: 70 },
     modules: [
@@ -200,6 +204,7 @@ export const INITIAL_COURSES: Course[] = [
     trainerId: "u4",
     status: "draft",
     published: false,
+    createdAt: "2026-08-28",
     enrolledLearnerIds: [],
     progress: {},
     modules: [
@@ -232,6 +237,7 @@ export const INITIAL_COURSES: Course[] = [
     trainerId: "u4",
     status: "approved",
     published: false,
+    createdAt: "2026-08-02",
     enrolledLearnerIds: ["u11"],
     progress: { u11: 0 },
     modules: [
@@ -264,6 +270,7 @@ export const INITIAL_COURSES: Course[] = [
     trainerId: "u4",
     status: "approved",
     published: true,
+    createdAt: "2026-04-11",
     enrolledLearnerIds: ["u5", "u8", "u14"],
     progress: { u5: 100, u8: 100, u14: 65 },
     modules: [
@@ -296,6 +303,7 @@ export const INITIAL_COURSES: Course[] = [
     trainerId: "u7",
     status: "approved",
     published: true,
+    createdAt: "2026-03-22",
     enrolledLearnerIds: ["u5", "u10", "u11", "u12"],
     progress: { u5: 100, u10: 45, u11: 90, u12: 25 },
     modules: [

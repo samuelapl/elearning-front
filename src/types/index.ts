@@ -8,7 +8,14 @@ export type Role =
 
 export type Lang = "en" | "am";
 
-export type CourseStatus = "draft" | "under_review" | "approved";
+export type UserStatus = "pending" | "active" | "rejected" | "suspended";
+
+export type CourseStatus =
+  | "draft"
+  | "under_review"
+  | "approved"
+  | "rejected"
+  | "archived";
 
 export interface RoleInfo {
   key: Role;
@@ -18,10 +25,16 @@ export interface RoleInfo {
 
 export interface User {
   id: string;
+  firstName: string;
+  lastName: string;
   name: string;
   email: string;
+  phone: string;
+  password: string;
   role: Role;
   department: string;
+  status: UserStatus;
+  createdAt: string;
 }
 
 export interface Lesson {
@@ -62,7 +75,11 @@ export interface Course {
   trainerId: string | null;
   status: CourseStatus;
   published: boolean;
+  createdAt: string;
   rejectionReason?: string;
+  lastRejectionReason?: string;
+  rejectedBy?: string;
+  rejectedAt?: string;
   enrolledLearnerIds: string[];
   progress: Record<string, number>;
   modules: Module[];
@@ -92,3 +109,9 @@ export interface AuditLog {
   target: string;
   timestamp: string;
 }
+
+export type ActionResult = { ok: true } | { ok: false; message: string };
+
+export type LoginResult =
+  | { ok: true; role: Role }
+  | { ok: false; message: string };

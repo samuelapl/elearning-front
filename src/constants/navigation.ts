@@ -19,7 +19,9 @@ import {
   Send,
   Settings,
   ShieldCheck,
+  Store,
   Users,
+  UserPlus,
   Video,
 } from "lucide-react";
 import type { Role } from "@/types";
@@ -66,6 +68,7 @@ export const NAV_ITEMS: Record<Role, NavItem[]> = {
   ],
   learner: [
     { label: "Dashboard", href: "/learner", icon: LayoutDashboard },
+    { label: "Available Courses", href: "/learner/catalog", icon: Store },
     { label: "My Courses", href: "/learner/my-courses", icon: BookOpen },
     { label: "Live Sessions", href: "/learner/live-sessions", icon: Video },
     { label: "Certificates", href: "/learner/certificates", icon: Award },
@@ -74,6 +77,8 @@ export const NAV_ITEMS: Record<Role, NavItem[]> = {
   system_admin: [
     { label: "Dashboard", href: "/system-admin", icon: LayoutDashboard },
     { label: "Users & Roles", href: "/system-admin/users", icon: Users },
+    { label: "Pending Registrations", href: "/system-admin/pending-registrations", icon: UserPlus },
+    { label: "Pending Course Approvals", href: "/system-admin/pending-course-approvals", icon: Hourglass },
     { label: "System Settings", href: "/system-admin/settings", icon: Settings },
     { label: "Audit Logs", href: "/system-admin/audit-logs", icon: ScrollText },
   ],

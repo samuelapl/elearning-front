@@ -2,7 +2,6 @@
 
 import { usePathname } from "next/navigation";
 import { Bell, Search } from "lucide-react";
-import { DEMO_USER_BY_ROLE } from "@/data/mock";
 import { getRoleFromPath, ROLE_LABELS } from "@/constants/roles";
 import { useLms } from "@/lib/lms-store";
 
@@ -17,10 +16,10 @@ function getInitials(label: string) {
 
 export default function Header() {
   const pathname = usePathname();
-  const { users } = useLms();
-  const role = getRoleFromPath(pathname);
+  const { currentUser } = useLms();
+  const role = currentUser?.role ?? getRoleFromPath(pathname);
   const roleLabel = role ? ROLE_LABELS[role] : "Dashboard";
-  const demoUser = role ? users.find((user) => user.id === DEMO_USER_BY_ROLE[role]) : undefined;
+  const demoUser = currentUser;
 
   return (
     <header className="glass sticky top-0 z-40 flex h-16 shrink-0 items-center justify-between gap-4 border-b border-slate-200/60 px-6">

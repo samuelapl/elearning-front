@@ -1,6 +1,5 @@
 "use client";
 
-import { DEMO_USER_BY_ROLE } from "@/data/mock";
 import { useLms } from "@/lib/lms-store";
 import { tr } from "@/constants/labels";
 import PageShell from "@/components/shared/PageShell";
@@ -11,8 +10,8 @@ import { ProgressBar } from "@/components/ui/ProgressBar";
 import { EmptyState } from "@/components/ui/EmptyState";
 
 export default function ProgressPage() {
-  const { courses, lang } = useLms();
-  const me = DEMO_USER_BY_ROLE.learner;
+  const { courses, lang, currentUser } = useLms();
+  const me = currentUser?.id ?? "";
   const enrolled = courses
     .filter((c) => c.enrolledLearnerIds.includes(me))
     .sort((a, b) => (a.progress[me] ?? 0) - (b.progress[me] ?? 0));

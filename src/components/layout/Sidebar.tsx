@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { GraduationCap, LogOut } from "lucide-react";
-import { DEMO_USER_BY_ROLE } from "@/data/mock";
 import { getRoleFromPath, ROLE_LABELS } from "@/constants/roles";
 import { NAV_ITEMS, ROLE_ICONS } from "@/constants/navigation";
 import { useLms } from "@/lib/lms-store";
@@ -11,11 +10,11 @@ import { cn } from "@/lib/utils";
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const { users } = useLms();
-  const role = getRoleFromPath(pathname) ?? "learner";
+  const { currentUser, logout } = useLms();
+  const role = currentUser?.role ?? getRoleFromPath(pathname) ?? "learner";
   const RoleIcon = ROLE_ICONS[role];
   const navItems = NAV_ITEMS[role];
-  const demoUser = users.find((user) => user.id === DEMO_USER_BY_ROLE[role]);
+  const displayUser = currentUser;
 
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(`${href}/`);
@@ -43,7 +42,7 @@ export default function Sidebar() {
           </div>
           <div className="min-w-0 leading-tight">
             <p className="truncate text-sm font-medium text-white">{ROLE_LABELS[role]}</p>
-            <p className="truncate text-[11px] text-slate-400">{demoUser?.name}</p>
+            <p className="truncate text-[11px] text-slate-400">{displayUser?.name}</p>
           </div>
         </div>
       </div>
@@ -86,10 +85,11 @@ export default function Sidebar() {
       <div className="relative border-t border-white/10 p-3">
         <Link
           href="/login"
+          onClick={() => logout()}
           className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-400 transition-colors hover:bg-white/5 hover:text-white"
         >
           <LogOut className="h-4 w-4" />
-          Switch role
+          Switch role / Sign out
         </Link>
       </div>
     </aside>

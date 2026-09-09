@@ -9,7 +9,7 @@ import {
   PlayCircle,
   Video,
 } from "lucide-react";
-import { DEMO_USER_BY_ROLE, TODAY } from "@/data/mock";
+import { TODAY } from "@/data/mock";
 import { useLms } from "@/lib/lms-store";
 import { tr } from "@/constants/labels";
 import PageShell from "@/components/shared/PageShell";
@@ -22,8 +22,8 @@ import { ProgressBar } from "@/components/ui/ProgressBar";
 import { CourseCard } from "@/components/features/courses/CourseCard";
 
 export default function LearnerDashboardPage() {
-  const { courses, sessions, lang, advanceProgress } = useLms();
-  const me = DEMO_USER_BY_ROLE.learner;
+  const { courses, sessions, lang, currentUser, advanceProgress } = useLms();
+  const me = currentUser?.id ?? "";
   const enrolled = courses.filter((c) => c.enrolledLearnerIds.includes(me));
   const inProgress = enrolled.filter((c) => (c.progress[me] ?? 0) < 100);
   const completed = enrolled.filter((c) => (c.progress[me] ?? 0) >= 100);

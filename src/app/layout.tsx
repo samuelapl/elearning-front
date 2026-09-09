@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import AppProviders from "@/components/providers/AppProviders";
+// @ts-expect-error - Global CSS is handled by Next.js at build time.
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -21,7 +23,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           rel="stylesheet"
         />
       </head>
-      <body className="font-sans">{children}</body>
+      <body className="font-sans">
+        <AppProviders>{children}</AppProviders>
+      </body>
     </html>
   );
 }
